@@ -1,0 +1,32 @@
+# FastAPI and related dependencies
+fastapi==0.95.2
+uvicorn==0.22.0
+python-multipart==0.0.6
+
+# Database (PostgreSQL + SQLAlchemy)
+sqlalchemy==2.0.15
+psycopg2-binary==2.9.6
+asyncpg==0.27.0
+
+# Machine Learning (TensorFlow)
+tensorflow==2.12.0
+
+# Image Processing (OpenCV)
+opencv-python==4.7.0.72
+opencv-python-headless==4.7.0.72  # For headless environments
+
+# OCR (Tesseract)
+pytesseract==0.3.10
+pillow==9.5.0
+
+# Geolocation (PostGIS)
+geoalchemy2==0.14.0
+shapely==2.0.1
+
+# Environment variables
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.3.1
+pytest-asyncio==0.21.0
+httpx==0.24.1
