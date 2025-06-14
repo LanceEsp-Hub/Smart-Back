@@ -3,35 +3,33 @@ from fastapi import UploadFile, HTTPException
 from PIL import Image
 import torch
 import numpy as np
+import os
 
-# Initialize model (YOLOv5 is more accurate than MobileNet for pet detection)
+# Load the YOLOv5 model from local file
 try:
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+    # Make sure to use the correct relative path based on where this script runs
+    model_path = os.path.join(os.path.dirname(__file__), '../../yolov5s.pt')
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path, source='local')
 except Exception as e:
-    raise RuntimeError(f"Failed to load model: {str(e)}")
+    raise RuntimeError(f"Failed to load YOLOv5 model from local file: {str(e)}")
 
 async def verify_pet_image(file: UploadFile):
     try:
-        # Read image file
         contents = await file.read()
         image = Image.open(io.BytesIO(contents))
-        
-        # Convert to RGB if needed
+
         if image.mode != 'RGB':
             image = image.convert('RGB')
-        
-        # Run detection
+
         results = model(image)
         detections = results.pandas().xyxy[0]
-        
-        # COCO class IDs: 15=cat, 16=dog
+
         has_cat = any((detections['class'] == 15) & (detections['confidence'] > 0.3))
         has_dog = any((detections['class'] == 16) & (detections['confidence'] > 0.3))
-        
-        # Get all detected objects for error reporting
+
         detected_objects = detections['name'].unique().tolist() if not detections.empty else []
         max_confidence = float(detections['confidence'].max()) if not detections.empty else 0.0
-        
+
         return {
             'is_valid': has_cat or has_dog,
             'is_cat': has_cat,
@@ -39,7 +37,7 @@ async def verify_pet_image(file: UploadFile):
             'confidence': max_confidence,
             'detected_objects': detected_objects
         }
-        
+
     except Exception as e:
         raise HTTPException(
             status_code=500,
