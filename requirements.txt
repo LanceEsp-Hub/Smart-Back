@@ -12,7 +12,6 @@ asyncpg==0.30.0
 
 # Machine Learning (TensorFlow)
 tensorflow==2.18.0
-tensorflow_intel==2.18.0
 tensorflow-io-gcs-filesystem==0.31.0
 tensorboard==2.18.0
 tensorboard-data-server==0.7.2
