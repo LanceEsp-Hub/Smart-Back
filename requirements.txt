@@ -111,7 +111,6 @@ rich==13.9.4
 
 # Spacy and NLP
 spacy==3.8.2
-en_core_web_sm==3.8.0
 blis==1.0.1
 catalogue==2.0.10
 confection==0.1.5
